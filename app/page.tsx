@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import ProposalForm from '@/components/ProposalForm';
 import ProposalResult from '@/components/ProposalResult';
+import ProposalHistory from '@/components/ProposalHistory';
 
 interface SiteInfo {
   url: string;
@@ -18,6 +19,7 @@ export default function Home() {
   const [proposal, setProposal] = useState('');
   const [siteInfo, setSiteInfo] = useState<SiteInfo | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
+  const [historyTrigger, setHistoryTrigger] = useState(0);
 
   const handleGenerate = async (url: string) => {
     setStatus('scraping');
@@ -95,6 +97,7 @@ export default function Home() {
           content: accumulated,
         }),
       });
+      setHistoryTrigger((n) => n + 1);
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
       setStatus('error');
@@ -173,6 +176,11 @@ export default function Home() {
             siteUrl={siteInfo.url}
           />
         )}
+
+        {/* History */}
+        <div className="mt-8 space-y-2">
+          <ProposalHistory refreshTrigger={historyTrigger} />
+        </div>
 
         {/* Footer */}
         <div className="mt-16 text-center text-xs text-white/15">
