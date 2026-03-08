@@ -4,6 +4,8 @@ import { useState } from 'react';
 import ProposalForm from '@/components/ProposalForm';
 import ProposalResult from '@/components/ProposalResult';
 import ProposalHistory from '@/components/ProposalHistory';
+import PromptEditor from '@/components/PromptEditor';
+import { DEFAULT_SYSTEM_PROMPT } from '@/lib/openrouter';
 
 interface SiteInfo {
   url: string;
@@ -20,6 +22,7 @@ export default function Home() {
   const [siteInfo, setSiteInfo] = useState<SiteInfo | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
   const [historyTrigger, setHistoryTrigger] = useState(0);
+  const [systemPrompt, setSystemPrompt] = useState(DEFAULT_SYSTEM_PROMPT);
 
   const handleGenerate = async (url: string) => {
     setStatus('scraping');
@@ -48,7 +51,7 @@ export default function Home() {
       const genRes = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ siteInfo: info }),
+        body: JSON.stringify({ siteInfo: info, systemPrompt }),
       });
 
       if (!genRes.ok) {
@@ -177,8 +180,9 @@ export default function Home() {
           />
         )}
 
-        {/* History */}
+        {/* Prompt & History */}
         <div className="mt-8 space-y-2">
+          <PromptEditor onChange={setSystemPrompt} />
           <ProposalHistory refreshTrigger={historyTrigger} />
         </div>
 
