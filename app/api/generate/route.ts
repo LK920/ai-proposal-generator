@@ -1,5 +1,7 @@
 import { NextRequest } from 'next/server';
-import { generateProposal } from '@/lib/openrouter';
+// OpenRouter → OpenAI로 전환. 롤백 시 아래 주석 해제 후 openai 라인 주석 처리
+// import { generateProposal } from '@/lib/openrouter';
+import { generateProposalOpenAI as generateProposal } from '@/lib/openai';
 
 export async function POST(req: NextRequest) {
   try {
