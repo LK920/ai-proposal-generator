@@ -18,12 +18,12 @@ export interface GenerateOptions {
 export async function generateProposalOpenAI(options: GenerateOptions): Promise<ReadableStream> {
   const { siteInfo, systemPrompt = DEFAULT_SYSTEM_PROMPT } = options;
 
-  const userMessage = `다음 웹사이트 정보를 바탕으로 프로젝트 제안서를 작성해주세요.
+  const userMessage = `다음 웹페이지의 내용을 분석하고 요약해주세요.
 
 **URL**: ${siteInfo.url}
-**사이트명**: ${siteInfo.title}
+**페이지 제목**: ${siteInfo.title}
 **설명**: ${siteInfo.description}
-**주요 내용**:
+**페이지 내용**:
 ${siteInfo.bodyText}`;
 
   const stream = await client.chat.completions.create({

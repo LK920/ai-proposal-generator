@@ -7,11 +7,18 @@ import ProposalHistory from '@/components/ProposalHistory';
 import PromptEditor from '@/components/PromptEditor';
 import { DEFAULT_SYSTEM_PROMPT } from '@/lib/openrouter';
 
+interface MediaItem {
+  type: 'image' | 'video';
+  url: string;
+  alt?: string;
+}
+
 interface SiteInfo {
   url: string;
   title: string;
   description: string;
   bodyText: string;
+  media: MediaItem[];
 }
 
 type Status = 'idle' | 'scraping' | 'generating' | 'done' | 'error';
@@ -127,14 +134,14 @@ export default function Home() {
                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
               </svg>
             </div>
-            <span className="text-xs text-white/30 font-medium tracking-widest uppercase">Proposal AI</span>
+            <span className="text-xs text-white/30 font-medium tracking-widest uppercase">Page Summary AI</span>
           </div>
           <h1 className="text-4xl font-bold text-white tracking-tight leading-tight">
-            AI 제안서 생성기
+            AI 페이지 요약기
           </h1>
           <p className="text-white/40 text-base leading-relaxed">
-            URL을 입력하면 웹사이트를 분석하여<br />
-            프로젝트 제안서를 자동으로 생성합니다.
+            URL을 입력하면 해당 페이지의 내용을<br />
+            쉽고 간결하게 요약해드립니다.
           </p>
         </div>
 
@@ -151,7 +158,7 @@ export default function Home() {
               <span className="pulse-dot w-1.5 h-1.5 rounded-full bg-white/50 inline-block" />
               <span className="pulse-dot w-1.5 h-1.5 rounded-full bg-white/50 inline-block" />
             </span>
-            <span className="text-sm text-white/50">웹사이트 분석 중...</span>
+            <span className="text-sm text-white/50">페이지 내용 불러오는 중...</span>
           </div>
         )}
 
@@ -177,6 +184,7 @@ export default function Home() {
             isStreaming={isStreaming}
             siteTitle={siteInfo.title}
             siteUrl={siteInfo.url}
+            media={siteInfo.media}
           />
         )}
 
@@ -188,7 +196,7 @@ export default function Home() {
 
         {/* Footer */}
         <div className="mt-16 text-center text-xs text-white/15">
-          Powered by OpenRouter · Claude Sonnet
+          Powered by OpenAI · GPT-4o
         </div>
       </div>
     </div>

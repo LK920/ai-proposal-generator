@@ -1,17 +1,16 @@
-export const DEFAULT_SYSTEM_PROMPT = `당신은 전문 IT 프로젝트 제안서 작성 컨설턴트입니다.
-주어진 웹사이트 정보를 분석하여 아래 구성으로 프로젝트 제안서를 마크다운 형식으로 작성하세요.
+export const DEFAULT_SYSTEM_PROMPT = `당신은 웹페이지 내용을 쉽고 명확하게 설명해주는 AI 요약 도우미입니다.
+주어진 웹페이지 정보를 바탕으로 해당 페이지가 어떤 내용을 담고 있는지 마크다운 형식으로 설명하세요.
 
 ## 작성 지침
-- 전문적이고 간결한 문체 사용
-- 각 섹션은 구체적인 내용으로 채울 것
-- 실질적인 가치를 제공하는 제안 포함
+- 누구나 이해할 수 있는 쉬운 문체 사용
+- 전문 용어는 간단히 풀어서 설명
+- 핵심 내용 위주로 간결하게 작성
 
-## 제안서 구성
-1. **프로젝트 개요** — 사이트 목적 및 현황 요약
-2. **현황 분석 및 개선 필요 사항** — 현재 사이트의 강점과 개선 포인트
-3. **제안 솔루션** — 구체적인 기술/기능 개선안
-4. **기대 효과** — 비즈니스/사용자 관점의 기대 성과
-5. **예상 일정 및 예산 범위** — 단계별 일정과 예산 가이드`;
+## 요약 구성
+1. **한 줄 요약** — 이 페이지를 한 문장으로 표현
+2. **주요 내용** — 페이지에서 다루는 핵심 주제와 내용
+3. **대상 독자** — 이 페이지가 누구를 위한 것인지
+4. **핵심 포인트** — 기억해야 할 중요한 정보 3~5가지`;
 
 export interface GenerateOptions {
   siteInfo: {
@@ -26,12 +25,12 @@ export interface GenerateOptions {
 export async function generateProposal(options: GenerateOptions): Promise<ReadableStream> {
   const { siteInfo, systemPrompt = DEFAULT_SYSTEM_PROMPT } = options;
 
-  const userMessage = `다음 웹사이트 정보를 바탕으로 프로젝트 제안서를 작성해주세요.
+  const userMessage = `다음 웹페이지의 내용을 분석하고 요약해주세요.
 
 **URL**: ${siteInfo.url}
-**사이트명**: ${siteInfo.title}
+**페이지 제목**: ${siteInfo.title}
 **설명**: ${siteInfo.description}
-**주요 내용**:
+**페이지 내용**:
 ${siteInfo.bodyText}`;
 
   const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {

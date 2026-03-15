@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AI 제안서 생성기",
-  description: "URL을 입력하면 AI가 프로젝트 제안서를 자동 생성합니다.",
+  title: "AI 페이지 요약기",
+  description: "URL을 입력하면 AI가 해당 페이지의 내용을 쉽고 간결하게 요약해드립니다.",
 };
 
 export default function RootLayout({

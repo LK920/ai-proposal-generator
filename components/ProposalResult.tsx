@@ -3,11 +3,18 @@
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
+interface MediaItem {
+  type: 'image' | 'video';
+  url: string;
+  alt?: string;
+}
+
 interface ProposalResultProps {
   content: string;
   isStreaming: boolean;
   siteTitle?: string;
   siteUrl?: string;
+  media?: MediaItem[];
 }
 
 export default function ProposalResult({
@@ -15,6 +22,7 @@ export default function ProposalResult({
   isStreaming,
   siteTitle,
   siteUrl,
+  media = [],
 }: ProposalResultProps) {
   const handleCopy = async () => {
     await navigator.clipboard.writeText(content);
@@ -28,7 +36,7 @@ export default function ProposalResult({
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-white/60 inline-block" />
             <span className="text-xs text-white/40 uppercase tracking-widest font-medium">
-              AI Generated Proposal
+              AI Page Summary
             </span>
           </div>
           {siteTitle && (
@@ -64,6 +72,38 @@ export default function ProposalResult({
       {/* Divider */}
       <div className="h-px bg-white/06 mb-6" />
 
+      {/* Media Preview */}
+      {media.length > 0 && (
+        <div className="mb-6">
+          <p className="text-xs text-white/25 uppercase tracking-widest mb-3">페이지 미디어</p>
+          <div className="flex flex-wrap gap-3">
+            {media.map((item, i) =>
+              item.type === 'video' ? (
+                <div key={i} className="w-full rounded-xl overflow-hidden">
+                  <iframe
+                    src={item.url}
+                    className="w-full aspect-video"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+              ) : (
+                <a key={i} href={item.url} target="_blank" rel="noopener noreferrer">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={item.url}
+                    alt={item.alt || ''}
+                    className="h-24 w-auto rounded-lg object-cover opacity-80 hover:opacity-100 transition-opacity"
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+                  />
+                </a>
+              )
+            )}
+          </div>
+          <div className="h-px bg-white/06 mt-6" />
+        </div>
+      )}
+
       {/* Content */}
       <div className="proposal-content text-sm leading-relaxed">
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
@@ -80,7 +120,7 @@ export default function ProposalResult({
             <span className="pulse-dot w-1 h-1 rounded-full bg-white/40 inline-block" />
             <span className="pulse-dot w-1 h-1 rounded-full bg-white/40 inline-block" />
           </span>
-          제안서 생성 중...
+          요약 생성 중...
         </div>
       )}
     </div>

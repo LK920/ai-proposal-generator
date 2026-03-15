@@ -94,7 +94,7 @@ export default function PromptEditor({ onChange }: PromptEditorProps) {
 
           {/* Guide */}
           <p className="text-xs text-white/20 leading-relaxed">
-            프롬프트를 수정하면 다음 제안서 생성부터 적용됩니다. 브라우저에 저장됩니다.
+            프롬프트를 수정하면 다음 요약부터 적용됩니다. 브라우저에 저장됩니다.
           </p>
 
           {/* Save button */}
