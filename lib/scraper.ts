@@ -1,4 +1,4 @@
-1import * as cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 
 export interface MediaItem {
   type: 'image' | 'video';
