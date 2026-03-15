@@ -1,4 +1,4 @@
-import * as cheerio from 'cheerio';
+1import * as cheerio from 'cheerio';
 
 export interface MediaItem {
   type: 'image' | 'video';
@@ -114,7 +114,8 @@ export async function scrapeUrl(url: string): Promise<ScrapeResult> {
     }
   });
 
-  // <video> 태그 — src 또는 <source> 자식의 src, data-src 순서로 탐색
+  // <video> 태그 — poster만 수집해 본문 이미지에서 제외 처리
+  // 직접 파일(mp4, webm 등)은 iframe에 넣으면 다운로드 발생하므로 수집하지 않음
   const videoPosterUrls = new Set<string>();
   $('video').each((_, el) => {
     const poster = $(el).attr('poster');
@@ -122,15 +123,6 @@ export async function scrapeUrl(url: string): Promise<ScrapeResult> {
       const resolved = resolveUrl(url, poster);
       if (resolved) videoPosterUrls.add(resolved);
     }
-
-    const src =
-      $(el).attr('src') ||
-      $(el).attr('data-src') ||
-      $('source', el).first().attr('src') ||
-      $('source', el).first().attr('data-src') ||
-      '';
-    const resolved = resolveUrl(url, src);
-    if (resolved) addMedia({ type: 'video', url: resolved });
   });
 
   // 본문 이미지 — 콘텐츠 영역만, 최대 5장, 에셋/GIF/아이콘 제외
